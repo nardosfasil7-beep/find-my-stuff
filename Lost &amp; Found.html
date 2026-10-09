@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lost &amp; Found</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef0f6;--card:#fff;--ink:#1b2340;--muted:#5d6584;--line:#d5d9e8;--lost:#c93c35;--lostbg:#fbe3e1;--found:#0f7a74;--foundbg:#d8f0ee;--onc:#fff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10142a;--card:#1a2040;--ink:#e8ebf8;--muted:#a1a9cc;--line:#2d3560;--lost:#ff8a82;--lostbg:#4a1f27;--found:#5fd3c9;--foundbg:#12403f;--onc:#10142a}}
+:root[data-theme="dark"]{--bg:#10142a;--card:#1a2040;--ink:#e8ebf8;--muted:#a1a9cc;--line:#2d3560;--lost:#ff8a82;--lostbg:#4a1f27;--found:#5fd3c9;--foundbg:#12403f;--onc:#10142a}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 "Nunito Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:Sora,system-ui,sans-serif;line-height:1.15;margin:0}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+.hero{padding:44px 0 20px}
+.hero h1{font-size:clamp(2.1rem,7vw,3.6rem);font-weight:800;letter-spacing:-.02em;max-width:15ch}
+.hero p{color:var(--muted);max-width:50ch;margin:12px 0 24px}
+.big{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:560px){.big{grid-template-columns:1fr}}
+.cta{border:0;border-radius:14px;padding:22px;text-align:left;cursor:pointer;color:var(--onc);font:inherit}
+.cta strong{display:block;font:700 1.4rem Sora,sans-serif;margin-bottom:4px}
+.cta span{opacity:.92}
+.cta.lost{background:var(--lost)}.cta.found{background:var(--found)}
+.cta:hover{filter:brightness(1.08)}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+section{padding:26px 0}
+h2{font-size:1.5rem;margin-bottom:12px}
+.tools{display:grid;grid-template-columns:1fr auto auto;gap:10px;margin-bottom:14px}
+@media (max-width:640px){.tools{grid-template-columns:1fr 1fr}.tools input{grid-column:1/-1}}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px;width:100%}
+.seg{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 14px;font:inherit;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.item{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.item .ph{aspect-ratio:4/3;background:var(--line);display:grid;place-items:center;color:var(--muted);font-size:.9rem}
+.item .ph img{width:100%;height:100%;object-fit:cover;display:block}
+.item .b{padding:14px;display:grid;gap:4px}
+.tag{justify-self:start;font-weight:700;font-size:.85rem;border-radius:6px;padding:2px 9px}
+.tag.lost{background:var(--lostbg);color:var(--lost)}.tag.found{background:var(--foundbg);color:var(--found)}
+.item h3{font-size:1.1rem}.item .m{color:var(--muted);font-size:.92rem;margin:0}
+.empty{grid-column:1/-1;border:1px dashed var(--line);border-radius:12px;padding:22px;color:var(--muted)}
+form{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;gap:14px;max-width:640px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:560px){.row{grid-template-columns:1fr}}
+label{display:grid;gap:5px;font-weight:700;font-size:.95rem}
+.hint{font-weight:400;color:var(--muted);font-size:.85rem}
+.submit{border:0;border-radius:8px;padding:12px 20px;font:700 1rem "Nunito Sans",sans-serif;cursor:pointer;color:var(--onc);background:var(--ink)}
+#prev{max-width:160px;border-radius:8px;display:none}
+#msg{margin:0;font-weight:700;color:var(--found)}
+footer{padding:20px 0 40px;color:var(--muted);font-size:.9rem}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+<h1>Lost something? Found something?</h1>
+<p>Post it here so the right person can find it. Share only the general area, never a home address or phone number.</p>
+<div class="big">
+<button class="cta lost" data-kind="Lost"><strong>Report Lost Item</strong><span>I lost something</span></button>
+<button class="cta found" data-kind="Found"><strong>Report Found Item</strong><span>I found something</span></button>
+</div>
+</div></header>
+
+<section id="browse"><div class="wrap">
+<h2>Browse reports</h2>
+<div class="tools">
+<input id="q" type="search" placeholder="Search by item, place, or category" aria-label="Search reports">
+<select id="cat" aria-label="Filter by category"></select>
+<select id="sort" aria-label="Sort"><option value="new">Newest first</option><option value="old">Oldest first</option></select>
+</div>
+<div class="seg" id="seg" role="group" aria-label="Filter by type"></div>
+<p id="count" class="hint" aria-live="polite"></p>
+<div class="cards" id="cards"></div>
+</div></section>
+
+<section id="report"><div class="wrap">
+<h2 id="formTitle">Report an item</h2>
+<form id="form">
+<div class="seg" id="kindSeg" role="group" aria-label="Report type"></div>
+<label>Item name<input id="fName" required maxlength="60" placeholder="e.g. Blue backpack"></label>
+<div class="row">
+<label>Category<select id="fCat" required></select></label>
+<label>Date <span class="hint">When it was lost or found</span><input id="fDate" type="date" required></label>
+</div>
+<label>General location<input id="fLoc" required maxlength="80" placeholder="e.g. Central Library, second floor"></label>
+<label>Photo <span class="hint">Optional</span><input id="fPhoto" type="file" accept="image/*"></label>
+<img id="prev" alt="Photo preview">
+<button class="submit" type="submit">Post report</button>
+<p id="msg" role="status"></p>
+</form>
+</div></section>
+
+<footer><div class="wrap">Reports are saved in this browser for now. A shared database will make them available on every device.</div></footer>
+
+<script>
+const CATS=["Bags","Keys","Phones and electronics","Wallets and cards","Clothing","Jewelry","Pets","Other"];
+const KEY="lostfound-v1";
+let kind="Lost",typeFilter="All",photo="";
+const today=new Date(),iso=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const seed=[
+{id:1,kind:"Lost",name:"Black leather wallet",cat:"Wallets and cards",date:"2026-10-06",loc:"Bus stop on Main St",photo:""},
+{id:2,kind:"Found",name:"Set of three keys",cat:"Keys",date:"2026-10-07",loc:"Riverside Park, near the fountain",photo:""},
+{id:3,kind:"Found",name:"Blue umbrella",cat:"Other",date:"2026-10-05",loc:"Central Library entrance",photo:""},
+{id:4,kind:"Lost",name:"Gray tabby cat named Miso",cat:"Pets",date:"2026-10-08",loc:"Oak Street area",photo:""}];
+let reports=load();
+function load(){try{const s=localStorage.getItem(KEY);if(s)return JSON.parse(s)}catch(e){}return seed.slice()}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(reports));return true}catch(e){return false}}
+function el(t,c,x){const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function fmt(d){return new Date(d+"T12:00:00").toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"})}
+function segs(box,vals,cur,fn){box.replaceChildren();vals.forEach(v=>{const b=el("button",null,v);b.type="button";b.setAttribute("aria-pressed",String(v===cur));b.onclick=()=>fn(v);box.append(b)})}
+
+function setKind(k){kind=k;segs(kindSeg,["Lost","Found"],kind,setKind);formTitle.textContent=k==="Lost"?"Report a lost item":"Report a found item"}
+function render(){
+ segs(seg,["All","Lost","Found"],typeFilter,v=>{typeFilter=v;render()});
+ const q=document.getElementById("q").value.trim().toLowerCase(),c=cat.value;
+ let list=reports.filter(r=>(typeFilter==="All"||r.kind===typeFilter)&&(c==="All categories"||r.cat===c)&&(!q||(r.name+" "+r.loc+" "+r.cat).toLowerCase().includes(q)));
+ list.sort((a,b)=>sort.value==="new"?b.date.localeCompare(a.date)||b.id-a.id:a.date.localeCompare(b.date)||a.id-b.id);
+ count.textContent=list.length+(list.length===1?" report":" reports");
+ cards.replaceChildren();
+ if(!list.length){cards.append(el("div","empty","No matching reports. Try a different search, or post a report below."));return}
+ list.forEach(r=>{
+  const a=el("article","item"),ph=el("div","ph");
+  if(r.photo){const i=el("img");i.src=r.photo;i.alt=r.name;ph.replaceChildren(i)}else ph.textContent="No photo";
+  const b=el("div","b");
+  b.append(el("span","tag "+r.kind.toLowerCase(),r.kind),el("h3",null,r.name),el("p","m",r.cat),el("p","m",r.loc),el("p","m",fmt(r.date)));
+  a.append(ph,b);cards.append(a)});
+}
+function init(){
+ cat.append(new Option("All categories"));CATS.forEach(c=>{cat.append(new Option(c));fCat.append(new Option(c))});
+ fDate.value=iso(today);fDate.max=iso(today);
+ document.querySelectorAll(".cta").forEach(b=>b.onclick=()=>{setKind(b.dataset.kind);report.scrollIntoView();fName.focus({preventScroll:true})});
+ q.oninput=cat.onchange=sort.onchange=render;
+ setKind("Lost");render();
+}
+fPhoto.addEventListener("change",()=>{
+ const f=fPhoto.files[0];photo="";prev.style.display="none";if(!f)return;
+ const img=new Image(),url=URL.createObjectURL(f);
+ img.onload=()=>{const s=Math.min(1,640/Math.max(img.width,img.height)),c=document.createElement("canvas");
+  c.width=Math.round(img.width*s);c.height=Math.round(img.height*s);c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+  photo=c.toDataURL("image/jpeg",.7);prev.src=photo;prev.style.display="block";URL.revokeObjectURL(url)};
+ img.onerror=()=>{msg.textContent="That file couldn't be read as an image. Choose a JPG or PNG.";msg.style.color="var(--lost)"};
+ img.src=url;
+});
+form.addEventListener("submit",e=>{
+ e.preventDefault();
+ reports.push({id:Date.now(),kind,name:fName.value.trim(),cat:fCat.value,date:fDate.value,loc:fLoc.value.trim(),photo});
+ const ok=save();typeFilter=kind;q.value="";cat.value="All categories";render();
+ form.reset();fDate.value=iso(today);photo="";prev.style.display="none";
+ msg.style.color=ok?"var(--found)":"var(--lost)";
+ msg.textContent=ok?"Report posted. It's now listed under "+kind+" items.":"Report posted, but it couldn't be saved in this browser (storage full). It will disappear on reload.";
+ document.getElementById("browse").scrollIntoView();
+});
+init();
+</script>
+</body>
+</html>
